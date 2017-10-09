@@ -2,9 +2,7 @@ package sortfile;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,6 +13,18 @@ public class SortFiles {
         SortFiles sf = new SortFiles();
         List<File> fileList = sf.listAllFiles("src/main/resources", "split");
         System.out.println("fileList = " + fileList);
+    }
+
+    public void sortFile(List<File> fileList){
+        fileList.forEach(file -> {
+
+        });
+
+    }
+
+
+    public void mergeSortedFiles(List<File> fileList){
+
     }
 
     public List<File> listAllFiles(String filePath, String filePattern){
