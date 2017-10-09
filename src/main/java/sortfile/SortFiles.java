@@ -1,30 +1,37 @@
 package sortfile;
 
 import java.io.*;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Palash on 10/9/17.
  */
 public class SortFiles {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SortFiles sf = new SortFiles();
-        List<File> fileList = sf.listAllFiles("src/main/resources", "split");
-        System.out.println("fileList = " + fileList);
+        DirectoryStream<Path> fileList = sf.listAllFiles("src/main/resources", "split");
         sf.sortFile(fileList);
     }
 
-    public void sortFile(List<File> fileList){
-        fileList.forEach(file -> {
+    public void sortFile(DirectoryStream<Path> fileList){
+        for(Path entry: fileList){
+            System.out.println("entry = " + entry.getFileName());
+        }
+
+        //while(iterator.hasNext()){
+          //  iterator.next();
+        //}
+
+        fileList.forEach(filePath -> {
             try{
+                System.out.println("filePath.toAbsolutePath() = " + filePath.toAbsolutePath());
                 // Read file and sort in-memory
                 List<String> wordList = new ArrayList<String>();
-                Files.lines(Paths.get(file.getAbsolutePath())).forEach(inputLine -> {
+                Files.lines(Paths.get(filePath.toUri())).forEach(inputLine -> {
                     String[] words = inputLine.split("\\s+");
                     for(String word : words)
                         wordList.add(word);
@@ -44,9 +51,8 @@ public class SortFiles {
 
     }
 
-    public List<File> listAllFiles(String filePath, String filePattern){
-        File[] listOfFiles = new File(filePath).listFiles(new MyFileNameFilter(filePattern));
-        return Arrays.asList(listOfFiles);
+    public DirectoryStream<Path> listAllFiles(String filePath, String filePattern) throws IOException {
+        return Files.newDirectoryStream(Paths.get(filePath), path -> path.toString().startsWith(filePattern));
     }
 }
 
