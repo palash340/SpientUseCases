@@ -18,17 +18,8 @@ public class SortFiles {
     }
 
     public void sortFile(DirectoryStream<Path> fileList){
-        for(Path entry: fileList){
-            System.out.println("entry = " + entry.getFileName());
-        }
-
-        //while(iterator.hasNext()){
-          //  iterator.next();
-        //}
-
         fileList.forEach(filePath -> {
             try{
-                System.out.println("filePath.toAbsolutePath() = " + filePath.toAbsolutePath());
                 // Read file and sort in-memory
                 List<String> wordList = new ArrayList<String>();
                 Files.lines(Paths.get(filePath.toUri())).forEach(inputLine -> {
@@ -44,6 +35,7 @@ public class SortFiles {
                 ioe.printStackTrace();
             }
         });
+
     }
 
 
@@ -52,7 +44,7 @@ public class SortFiles {
     }
 
     public DirectoryStream<Path> listAllFiles(String filePath, String filePattern) throws IOException {
-        return Files.newDirectoryStream(Paths.get(filePath), path -> path.toString().startsWith(filePattern));
+        return Files.newDirectoryStream(Paths.get(filePath), path -> path.toString().startsWith(filePath + File.separator +  filePattern));
     }
 }
 
